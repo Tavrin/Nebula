@@ -7,7 +7,8 @@ export class Renderer {
         this.currentPage = {
             number: null,
             index: null,
-            paragraph: null
+            paragraph: null,
+            actions: null
         }
     }
 
@@ -17,11 +18,22 @@ export class Renderer {
         this.setRenderInformation(nebulaData);
 
         if (this.renderTarget) {
+            this.renderTarget.style.maxWidth = '20%'; 
             this.renderTarget.innerHTML = `
             
-            <story-panel>
-                <span slot="text">${this.currentPage.paragraph}</span>
+            <menu-panel>
+            </menu-panel>
+            <story-panel paper_background="gray">
+                <p slot="text" >${this.currentPage.paragraph}</p>
             </story-panel>
+            <action-panel>
+            ${Object.keys(this.currentPage.actions).map((action) => {
+                return `<action-item>
+                    <p slot="action">${this.currentPage.actions[action].text}</p>
+                    <a slot="page">${this.currentPage.actions[action].page}</a>
+                </action-item>`     
+            }).join("")}
+            </action-panel>
 
             `
         }
@@ -34,5 +46,6 @@ export class Renderer {
         }
 
         this.currentPage.paragraph = nebulaData.storyData.pages[this.currentPage.index].text;
+        this.currentPage.actions = nebulaData.storyData.pages[this.currentPage.index].actions;
     }
 }

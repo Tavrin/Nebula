@@ -26,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"Renderer\": () => (/* binding */ Renderer)\n/* harmony export */ });\n/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ \"./src/Utils.js\");\n\r\n\r\n\r\nclass Renderer {\r\n    constructor(config) {\r\n        this.renderTarget = document.querySelector(config.mount);\r\n        this.currentPage = {\r\n            number: null,\r\n            index: null,\r\n            paragraph: null\r\n        }\r\n    }\r\n\r\n    initComponents() {\r\n        const nebulaData = _Utils__WEBPACK_IMPORTED_MODULE_0__.Utils.getGameSessionData();\r\n        console.log(nebulaData);\r\n        this.setRenderInformation(nebulaData);\r\n\r\n        if (this.renderTarget) {\r\n            this.renderTarget.innerHTML = `\r\n            \r\n            <story-panel>\r\n                <span slot=\"text\">${this.currentPage.paragraph}</span>\r\n            </story-panel>\r\n\r\n            `\r\n        }\r\n    }\r\n\r\n    setRenderInformation(nebulaData) {\r\n        this.currentPage = {\r\n            number: nebulaData.gameData.currentPage,\r\n            index: nebulaData.gameData.currentPage - 1,\r\n        }\r\n\r\n        this.currentPage.paragraph = nebulaData.storyData.pages[this.currentPage.index].text;\r\n    }\r\n}\n\n//# sourceURL=webpack://js-game-framework/./src/Renderer.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"Renderer\": () => (/* binding */ Renderer)\n/* harmony export */ });\n/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ \"./src/Utils.js\");\n\r\n\r\n\r\nclass Renderer {\r\n    constructor(config) {\r\n        this.renderTarget = document.querySelector(config.mount);\r\n        this.currentPage = {\r\n            number: null,\r\n            index: null,\r\n            paragraph: null,\r\n            actions: null\r\n        }\r\n    }\r\n\r\n    initComponents() {\r\n        const nebulaData = _Utils__WEBPACK_IMPORTED_MODULE_0__.Utils.getGameSessionData();\r\n        console.log(nebulaData);\r\n        this.setRenderInformation(nebulaData);\r\n\r\n        if (this.renderTarget) {\r\n            this.renderTarget.style.maxWidth = '20%'; \r\n            this.renderTarget.innerHTML = `\r\n            \r\n            <menu-panel>\r\n            </menu-panel>\r\n            <story-panel paper_background=\"gray\">\r\n                <p slot=\"text\" >${this.currentPage.paragraph}</p>\r\n            </story-panel>\r\n            <action-panel>\r\n            ${Object.keys(this.currentPage.actions).map((action) => {\r\n                return `<action-item>\r\n                    <p slot=\"action\">${this.currentPage.actions[action].text}</p>\r\n                    <a slot=\"page\">${this.currentPage.actions[action].page}</a>\r\n                </action-item>`     \r\n            }).join(\"\")}\r\n            </action-panel>\r\n\r\n            `\r\n        }\r\n    }\r\n\r\n    setRenderInformation(nebulaData) {\r\n        this.currentPage = {\r\n            number: nebulaData.gameData.currentPage,\r\n            index: nebulaData.gameData.currentPage - 1,\r\n        }\r\n\r\n        this.currentPage.paragraph = nebulaData.storyData.pages[this.currentPage.index].text;\r\n        this.currentPage.actions = nebulaData.storyData.pages[this.currentPage.index].actions;\r\n    }\r\n}\n\n//# sourceURL=webpack://js-game-framework/./src/Renderer.js?");
 
 /***/ }),
 
@@ -40,13 +40,53 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./src/components/ActionItem.js":
+/*!**************************************!*\
+  !*** ./src/components/ActionItem.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ActionItem\": () => (/* binding */ ActionItem)\n/* harmony export */ });\nconst template = document.createElement('template');\r\ntemplate.innerHTML = `\r\n\r\n  <style>\r\n    p {\r\n      color: black;\r\n      padding: 5px;\r\n    }\r\n  </style>\r\n  <p>texte action</p>\r\n\r\n`\r\n\r\nclass ActionItem extends HTMLElement  {\r\n    constructor() {\r\n        super();\r\n        const shadow = this.attachShadow({mode: 'open'})\r\n        .appendChild(template.content.cloneNode(true));\r\n    }\r\n    \r\n    connectedCallback() {\r\n    }\r\n}\r\n\r\ncustomElements.define('action-item', ActionItem);\r\n\n\n//# sourceURL=webpack://js-game-framework/./src/components/ActionItem.js?");
+
+/***/ }),
+
+/***/ "./src/components/ActionPanel.js":
+/*!***************************************!*\
+  !*** ./src/components/ActionPanel.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"ActionPanel\": () => (/* binding */ ActionPanel)\n/* harmony export */ });\nconst template = document.createElement('template');\r\ntemplate.innerHTML = `\r\n\r\n  <style>\r\n    p {\r\n      color: black;\r\n      padding: 5px;\r\n    }\r\n  </style>\r\n  <div id=\"action-zone\">\r\n    <p>test action panel</p>\r\n  </div>\r\n\r\n`\r\n\r\nclass ActionPanel extends HTMLElement  {\r\n    constructor() {\r\n        super();\r\n        const shadow = this.attachShadow({mode: 'open'})\r\n        .appendChild(template.content.cloneNode(true));\r\n    }\r\n    \r\n    connectedCallback() {\r\n    }\r\n}\r\n\r\ncustomElements.define('action-panel', ActionPanel);\r\n\n\n//# sourceURL=webpack://js-game-framework/./src/components/ActionPanel.js?");
+
+/***/ }),
+
+/***/ "./src/components/MenuPanel.js":
+/*!*************************************!*\
+  !*** ./src/components/MenuPanel.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"MenuPanel\": () => (/* binding */ MenuPanel)\n/* harmony export */ });\nconst template = document.createElement('template');\r\ntemplate.innerHTML = `\r\n\r\n  <style>\r\n    p {\r\n      color: black;\r\n      padding: 5px;\r\n    }\r\n  </style>\r\n  <nav id=\"menu-zone\">\r\n    <ul>\r\n        <li>\r\n            aaa\r\n        </li>\r\n        <li>\r\n            bbb\r\n        </li>\r\n        <li>\r\n            ccc\r\n        </li>\r\n  </nav>\r\n\r\n`\r\n\r\nclass MenuPanel extends HTMLElement  {\r\n    constructor() {\r\n        super();\r\n        const shadow = this.attachShadow({mode: 'open'})\r\n        .appendChild(template.content.cloneNode(true));\r\n    }\r\n    \r\n    connectedCallback() {\r\n    }\r\n}\r\n\r\ncustomElements.define('menu-panel', MenuPanel);\r\n\n\n//# sourceURL=webpack://js-game-framework/./src/components/MenuPanel.js?");
+
+/***/ }),
+
+/***/ "./src/components/StoryPanel.js":
+/*!**************************************!*\
+  !*** ./src/components/StoryPanel.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"StoryPanel\": () => (/* binding */ StoryPanel)\n/* harmony export */ });\nconst template = document.createElement('template');\r\ntemplate.innerHTML = `\r\n\r\n  <style>\r\n    p {\r\n      color: black;\r\n      padding: 5px;\r\n    }\r\n  </style>\r\n  <div id=\"text-zone\">\r\n    <p>\r\n      <slot name=\"text\" />\r\n    </p>\r\n  </div>\r\n\r\n`\r\n\r\nclass StoryPanel extends HTMLElement  {\r\n    constructor() {\r\n        super();\r\n        const shadow = this.attachShadow({mode: 'open'})\r\n        .appendChild(template.content.cloneNode(true));\r\n    }\r\n    \r\n    connectedCallback() {\r\n      if (this.getAttribute('paper_background')) {\r\n        this.shadowRoot.querySelector('#text-zone').style.background = this.getAttribute('paper_background');\r\n        console.log( this.shadowRoot.querySelector('#text-zone'));\r\n      }\r\n    }\r\n}\r\n\r\ncustomElements.define('story-panel', StoryPanel);\r\n\n\n//# sourceURL=webpack://js-game-framework/./src/components/StoryPanel.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _Nebula__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nebula */ \"./src/Nebula.js\");\n/**\r\n * @namespace Nebula\r\n */\r\n\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_Nebula__WEBPACK_IMPORTED_MODULE_0__.Nebula);\r\n__webpack_require__.g.Nebula = _Nebula__WEBPACK_IMPORTED_MODULE_0__.Nebula;\n\n//# sourceURL=webpack://js-game-framework/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _Nebula__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nebula */ \"./src/Nebula.js\");\n/* harmony import */ var _components_StoryPanel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/StoryPanel */ \"./src/components/StoryPanel.js\");\n/* harmony import */ var _components_MenuPanel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/MenuPanel */ \"./src/components/MenuPanel.js\");\n/* harmony import */ var _components_ActionPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ActionPanel */ \"./src/components/ActionPanel.js\");\n/* harmony import */ var _components_ActionItem__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/ActionItem */ \"./src/components/ActionItem.js\");\n/**\r\n * @namespace Nebula\r\n */\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_Nebula__WEBPACK_IMPORTED_MODULE_0__.Nebula);\r\n__webpack_require__.g.Nebula = _Nebula__WEBPACK_IMPORTED_MODULE_0__.Nebula;\n\n//# sourceURL=webpack://js-game-framework/./src/index.js?");
 
 /***/ })
 

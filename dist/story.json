@@ -11,18 +11,22 @@
     "pages": [
         {
             "page": 1,
-            "text": "test texte",
-            "choices": [
+            "text": "test texte json",
+            "actions": [
                 {
                     "page": 2,
                     "text":"test action"
+                },
+                {
+                    "page": 2,
+                    "text":"test action 2"
                 }
             ]
         },
         {
             "page": 2,
             "text": "test texte 2",
-            "choices": [
+            "actions": [
                 {
                     "page": 1,
                     "text":"test action"
